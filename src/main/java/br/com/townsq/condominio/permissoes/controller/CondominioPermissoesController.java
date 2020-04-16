@@ -26,7 +26,6 @@ public class CondominioPermissoesController {
             @RequestParam(value = "arquivo_base", required = false) String arquivoBase) {
 
         return ResponseEntity.ok().body(baseUsuarios.obtemPermissoesUsuario(email, arquivoBase));
-        // return baseUsuarios.obtemPermissoesUsuario(email, arquivoBase);
     }
 
 }
