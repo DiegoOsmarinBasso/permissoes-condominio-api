@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.townsq.condominio.permissoes.helper.BaseUsuarios;
-import br.com.townsq.condominio.permissoes.model.Usuario;
+import br.com.townsq.condominio.permissoes.service.BaseUsuariosService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -18,15 +17,16 @@ import io.swagger.annotations.ApiOperation;
 public class CondominioPermissoesController {
 
     @Autowired
-    private BaseUsuarios baseUsuarios;
+    private BaseUsuariosService baseUsuarios;
 
-    @GetMapping("/permissoes")
+    @GetMapping(path = "/permissoes", produces = "text/plain")
     @ApiOperation(value = "Retorna a lista de permissões mais altas que determinado usuário possui em cada condomínio.")
-    public ResponseEntity<Usuario> permissoesCondomino(
+    public ResponseEntity<String> permissoesCondomino(
             @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "arquivo_base", required = false) String arquivoBase) {
 
         return ResponseEntity.ok().body(baseUsuarios.obtemPermissoesUsuario(email, arquivoBase));
+        // return baseUsuarios.obtemPermissoesUsuario(email, arquivoBase);
     }
 
 }
