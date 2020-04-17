@@ -60,7 +60,7 @@ public class UsuarioUtil {
     /**
      * 
      * @param usuario
-     * @param grupos
+     * @param listaGeralGrupos
      */
     public void populaGrupos(Usuario usuario, List<Grupo> listaGeralGrupos) {
 
