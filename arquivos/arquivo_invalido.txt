@@ -1,0 +1,2 @@
+1;[(Reservas,Escrita),(Entregas,Nenhuma),(Usuarios,Escrita)]
+2;[(Reservas,Escrita),(Entregas,Leitura),(Usuarios,Escrita)]

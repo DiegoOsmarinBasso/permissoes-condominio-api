@@ -51,6 +51,7 @@ public class BaseUsuariosService {
                 case USUARIO:
                     if (usuario == null && email.equals(campos[1])) {
                         usuario = new Usuario(email);
+                        usuario.setGrupos(grupoUtil.geraGruposUsuario(campos));
                     }
                     break;
                 case GRUPO:
@@ -66,9 +67,9 @@ public class BaseUsuariosService {
             throw new PermissaoErroException(PermissaoErroEnum.ARQUIVO_INVALIDO);
         }
 
-        // TODO: funcao filtra grupos
+        // Filtra grupos do usuário
         if (usuario != null) {
-            usuario.setGrupos(grupos);
+            usuarioUtil.populaGrupos(usuario, grupos);
             return usuarioUtil.permissoesMaisAltas(usuario);
         } else {
             throw new PermissaoErroException(PermissaoErroEnum.USUARIO_NAO_ENCONTRADO);

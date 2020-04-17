@@ -1,5 +1,6 @@
 package br.com.townsq.condominio.permissoes.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario {
@@ -9,6 +10,7 @@ public class Usuario {
 
     public Usuario(String email) {
         this.email = email;
+        grupos = new ArrayList<>();
     }
 
     public String getEmail() {

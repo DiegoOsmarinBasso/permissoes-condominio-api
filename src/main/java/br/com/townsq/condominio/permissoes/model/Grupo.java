@@ -34,4 +34,12 @@ public class Grupo {
     public Map<FuncionalidadeEnum, PermissaoEnum> getPermissoes() {
         return permissoes;
     }
+
+    public void setPermissoes(Map<FuncionalidadeEnum, PermissaoEnum> permissoes) {
+        this.permissoes = permissoes;
+    }
+
+    public boolean mesmoGrupo(Grupo grupo) {
+        return this.tipoGrupo == grupo.getTipoGrupo() && this.idCondominio.equals(grupo.getIdCondominio());
+    }
 }

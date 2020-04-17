@@ -2,18 +2,22 @@ package br.com.townsq.condominio.permissoes.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.townsq.condominio.permissoes.model.CondominioPermissoes;
-import br.com.townsq.condominio.permissoes.model.FuncionalidadeEnum;
 import br.com.townsq.condominio.permissoes.model.Grupo;
-import br.com.townsq.condominio.permissoes.model.PermissaoEnum;
 import br.com.townsq.condominio.permissoes.model.Usuario;
 
 @Component
 public class UsuarioUtil {
+
+    @Autowired
+    private PermissaoUtil permissaoUtil;
+    @Autowired
+    private SaidaUtil saidaUtil;
 
     /**
      * 
@@ -36,51 +40,36 @@ public class UsuarioUtil {
                 if (condominioPermissoes.getCondominio().equals(grupo.getIdCondominio())) {
 
                     condominioEstaNaLista = true;
-                    computaPermissoesMaisAltas(condominioPermissoes, grupo);
+                    permissaoUtil.computaPermissoesMaisAltas(condominioPermissoes, grupo);
                 }
             }
 
-            // Se condomínio não etá na lista, insere novo registro
+            // Se condomínio não está na lista, insere novo registro
             if (!condominioEstaNaLista) {
+
                 CondominioPermissoes condomioPermissoes = new CondominioPermissoes(grupo.getIdCondominio());
                 condomioPermissoes.setPermissoes(grupo.getPermissoes());
                 condominioPermissoesLista.add(condomioPermissoes);
             }
-
         }
 
         // Monta String de saída
-        return montaStringSaida(condominioPermissoesLista);
+        return saidaUtil.montaStringSaida(condominioPermissoesLista);
     }
 
     /**
      * 
-     * @param condominioPermissoes
-     * @param grupo
+     * @param usuario
+     * @param grupos
      */
-    private void computaPermissoesMaisAltas(CondominioPermissoes condominioPermissoes, Grupo grupo) {
+    public void populaGrupos(Usuario usuario, List<Grupo> listaGeralGrupos) {
 
-        Map<FuncionalidadeEnum, PermissaoEnum> permissoesCondomino = condominioPermissoes.getPermissoes();
-        Map<FuncionalidadeEnum, PermissaoEnum> permissoesGrupo = grupo.getPermissoes();
+        for (Grupo grupoUsuario : usuario.getGrupos()) {
+            Optional<Grupo> grupo = listaGeralGrupos.stream().filter(g -> g.mesmoGrupo(grupoUsuario)).findAny();
 
-        for (FuncionalidadeEnum funcionalidade : permissoesCondomino.keySet()) {
-            if (permissoesGrupo.get(funcionalidade).ordinal() < permissoesCondomino.get(funcionalidade).ordinal()) {
-                permissoesCondomino.put(funcionalidade, permissoesGrupo.get(funcionalidade));
+            if (grupo != null) {
+                grupoUsuario.setPermissoes(grupo.get().getPermissoes());
             }
         }
-    }
-
-    /**
-     * 
-     * @param condominioPermissoesLista
-     * @return
-     */
-    private String montaStringSaida(List<CondominioPermissoes> condominioPermissoesLista) {
-
-        String permissoesSaida = "";
-        for (CondominioPermissoes condominioPermissoes : condominioPermissoesLista) {
-            permissoesSaida += condominioPermissoes.toString() + "\n";
-        }
-        return permissoesSaida;
     }
 }
